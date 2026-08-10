@@ -65,6 +65,7 @@
 .match-truck-progress.selecting .match-praise,.match-truck-progress.selecting .lamp-status{font-size:9px}
 .game-meta{display:none}
 .game-message{inset:0}
+.game-message p:empty{display:none}
 .confetti{inset:0}
 .level-select .game-instruction{max-width:860px;margin:0 auto 24px;padding:0;border:0;border-radius:0;background:transparent;color:#1679d3;font-family:Fredoka,sans-serif;font-weight:700}
 .level-select .game-instruction span{color:#1679d3;font-family:Fredoka,sans-serif}

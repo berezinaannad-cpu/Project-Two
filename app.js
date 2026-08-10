@@ -111,7 +111,7 @@ function matchLevel(){
 function soundLevel(){
   hideMessage();hideMatchTruck();$('.jay-coach').style.display='none';locked=false;
   let pool=numberLevels[level].values,questions=shuffle(pool).slice(0,5),q=0,correct=0,area=$('#gameArea');
-  area.innerHTML='<div class="sound-road" id="soundRoad"><div class="road-line"><span class="start-mark">START</span><span class="finish-line"></span><span class="finish-flag">🏁</span><img class="road-truck" src="assets/lorry-jay.png" alt="Lorry Jay on the road"></div><div class="road-progress-text" id="roadProgressText">0 / 5</div></div><div class="sound-stage"></div>';
+  area.innerHTML='<div class="sound-road" id="soundRoad"><div class="road-line"><span class="start-mark">START</span><span class="finish-line"></span><img class="road-truck" src="assets/lorry-jay.png" alt="Lorry Jay on the road"></div><div class="road-progress-text" id="roadProgressText">0 / 5</div></div><div class="sound-stage"></div>';
   function moveTruck(){let road=$('#soundRoad');road.style.setProperty('--road-progress',`${5+correct*18}%`);$('#roadProgressText').textContent=`${correct} / 5`;road.classList.remove('driving');void road.offsetWidth;road.classList.add('driving')}
   function render(){
     let answer=questions[q],options=shuffle([answer,...shuffle(pool.filter(n=>n!==answer)).slice(0,3)]),stage=$('.sound-stage',area);
@@ -133,7 +133,7 @@ function soundLevel(){
 function finishSoundLevel(){
   let road=$('#soundRoad');road?.classList.add('finish');
   $('#confetti').innerHTML=Array.from({length:54},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.2}s;--dur:${2.5+Math.random()*2}s;--drift:${-80+Math.random()*160}px"></i>`).join('');
-  setTimeout(()=>tone(880,.4,'triangle'),120);setTimeout(()=>message('You reached the finish!',`You earned 5 points. Score: ${score} / 15`,true,'Play Again','Choose Another Game','sound-replay'),850);
+  setTimeout(()=>tone(880,.4,'triangle'),120);setTimeout(()=>message('You reached the finish!','',true,'Play Again','Choose Another Game','sound-replay'),850);
 }
 
 function unscrambleLevel(){
