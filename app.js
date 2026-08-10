@@ -16,7 +16,7 @@ const numberWords={1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'seven'
 const gameNames={match:'WORD MATCH',sound:'SOUND DETECTIVE',unscramble:'UNSCRAMBLE'};
 const instructions={
   match:'<span>Help Lorry Jay turn on the light to start the journey.</span><span>Open two cards. Match each English word with the correct picture.</span>',
-  sound:'Press the speaker, listen carefully and choose the number you hear.',
+  sound:'<span>Help Lorry Jay reach the finish line!</span><span>Press the speaker, listen carefully and choose the number you hear.</span>',
   unscramble:'Press Listen, then choose the letters in the correct order.'
 };
 
@@ -43,7 +43,7 @@ function message(title,text,finished=false,primaryLabel='Play again',secondaryLa
   $('.restart',m).textContent=primaryLabel;$('.restart',m).dataset.action=action;$('.message-home',m).textContent=secondaryLabel;
   $('.message-home',m).style.display=finished?'inline-block':'none';m.classList.remove('hidden');
 }
-$('.restart').onclick=e=>{if(e.currentTarget.dataset.action==='match-replay'){score=0;completedLevels=new Set();setScore(0);beginLevel(level)}else startGame(activeGame)};
+$('.restart').onclick=e=>{if(['match-replay','sound-replay'].includes(e.currentTarget.dataset.action)){score=0;completedLevels=new Set();setScore(0);beginLevel(level)}else startGame(activeGame)};
 function coach(text,good=true){let bubble=$('#jaySpeech');bubble.textContent=text;bubble.classList.toggle('try',!good)}
 function setScore(n){score=n;$('#score').textContent=n}
 function saveBest(){let best=Math.max(score,+(localStorage.getItem('lumen-'+activeGame)||0));localStorage.setItem('lumen-'+activeGame,best);$('#best').textContent=best}
@@ -51,15 +51,16 @@ function saveBest(){let best=Math.max(score,+(localStorage.getItem('lumen-'+acti
 function showLevelSelect(){
   hideMessage();let area=$('#gameArea');
   activeGame==='match'?prepareMatchTruck(5):hideMatchTruck();
-  area.classList.toggle('match-select',activeGame==='match');area.classList.remove('match-active');$('#matchTruckProgress').classList.toggle('selecting',activeGame==='match');
-  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>${activeGame==='match'?'Choose the topic':'Choose a level'}</h2><div class="level-buttons"></div></div>`;
+  area.classList.toggle('match-select',activeGame==='match');area.classList.toggle('sound-select',activeGame==='sound');area.classList.remove('match-active','sound-active');$('#matchTruckProgress').classList.toggle('selecting',activeGame==='match');
+  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>${activeGame==='unscramble'?'Choose a level':'Choose the topic'}</h2><div class="level-buttons"></div></div>`;
   let names=activeGame==='match'?topics.map(t=>t.name):activeGame==='sound'?numberLevels.map(t=>t.name):['Transport','Toys & Room','Numbers'];
   names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
 }
-function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;let area=$('#gameArea');area.classList.toggle('match-active',activeGame==='match');area.classList.remove('match-select');$('#matchTruckProgress').classList.remove('selecting');activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
+function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;let area=$('#gameArea');area.classList.toggle('match-active',activeGame==='match');area.classList.toggle('sound-active',activeGame==='sound');area.classList.remove('match-select','sound-select');$('#matchTruckProgress').classList.remove('selecting');activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
 function completeLevel(){
   if(!completedLevels.has(level)){completedLevels.add(level);setScore(score+5)}saveBest();tone(760,.35);
   if(activeGame==='match'){finishMatchLevel();return}
+  if(activeGame==='sound'){finishSoundLevel();return}
   coach('Amazing! You made Jay happy!');message('Great job!',`You earned 5 points. Score: ${score} / 15`,true);
 }
 
@@ -108,18 +109,31 @@ function matchLevel(){
 }
 
 function soundLevel(){
-  hideMessage();let pool=numberLevels[level].values,questions=shuffle(pool).slice(0,5),q=0,area=$('#gameArea');
+  hideMessage();hideMatchTruck();$('.jay-coach').style.display='none';locked=false;
+  let pool=numberLevels[level].values,questions=shuffle(pool).slice(0,5),q=0,correct=0,area=$('#gameArea');
+  area.innerHTML='<div class="sound-road" id="soundRoad"><div class="road-line"><span class="start-mark">START</span><span class="finish-line"></span><span class="finish-flag">🏁</span><img class="road-truck" src="assets/lorry-jay.png" alt="Lorry Jay on the road"></div><div class="road-progress-text" id="roadProgressText">0 / 5</div></div><div class="sound-stage"></div>';
+  function moveTruck(){let road=$('#soundRoad');road.style.setProperty('--road-progress',`${5+correct*18}%`);$('#roadProgressText').textContent=`${correct} / 5`;road.classList.remove('driving');void road.offsetWidth;road.classList.add('driving')}
   function render(){
-    let answer=questions[q],options=shuffle([answer,...shuffle(pool.filter(n=>n!==answer)).slice(0,3)]);
-    area.innerHTML=`<div class="sound-game"><p class="eyebrow">QUESTION ${q+1} OF 5</p><button class="speaker">🔊</button><h2>Which number did you hear?</h2><div class="answer-grid"></div><p class="feedback">You can listen again</p></div>`;
-    $('.speaker',area).onclick=()=>speak(numberWords[answer]);
+    let answer=questions[q],options=shuffle([answer,...shuffle(pool.filter(n=>n!==answer)).slice(0,3)]),stage=$('.sound-stage',area);
+    stage.innerHTML='<button class="speaker">🎙️ <span>Listen again</span></button><div class="answer-grid"></div><p class="feedback" aria-live="polite"></p>';
+    $('.speaker',stage).onclick=()=>speak(numberWords[answer]);
     options.forEach(n=>{let b=document.createElement('button');b.textContent=n;b.onclick=()=>{
       if(locked)return;locked=true;
-      if(n===answer){b.classList.add('correct');$('.feedback',area).textContent=`Well done! ${numberWords[answer]}`;coach('Well done!');tone(650)}
-      else{b.classList.add('wrong');$('.feedback',area).textContent=`The answer is ${answer} — ${numberWords[answer]}`;coach('Good try! Listen again.',false);tone(170);$$('.answer-grid button',area).find(x=>+x.textContent===answer).classList.add('correct')}
-      setTimeout(()=>{locked=false;q++;q<5?render():completeLevel()},1100);
-    };$('.answer-grid',area).append(b)});setTimeout(()=>speak(numberWords[answer]),300);
-  }render();
+      if(n===answer){
+        b.classList.add('correct');correct++;let praise=praisePhrases[(correct-1)%praisePhrases.length];$('.feedback',stage).textContent=praise;tone(650);moveTruck();
+        setTimeout(()=>{q++;locked=false;q<5?render():completeLevel()},950);
+      }else{
+        b.classList.add('wrong');$('.feedback',stage).textContent='Try again!';tone(210,.16,'triangle');
+        setTimeout(()=>{b.classList.remove('wrong');locked=false},650);
+      }
+    };$('.answer-grid',stage).append(b)});setTimeout(()=>speak(numberWords[answer]),250);
+  }moveTruck();render();
+}
+
+function finishSoundLevel(){
+  let road=$('#soundRoad');road?.classList.add('finish');
+  $('#confetti').innerHTML=Array.from({length:54},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.2}s;--dur:${2.5+Math.random()*2}s;--drift:${-80+Math.random()*160}px"></i>`).join('');
+  setTimeout(()=>tone(880,.4,'triangle'),120);setTimeout(()=>message('You reached the finish!',`You earned 5 points. Score: ${score} / 15`,true,'Play Again','Choose Another Game','sound-replay'),850);
 }
 
 function unscrambleLevel(){
