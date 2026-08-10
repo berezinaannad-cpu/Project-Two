@@ -46,4 +46,21 @@
 @keyframes headlightBlink{30%,80%{opacity:1}50%,100%{opacity:0}}
 @keyframes truckParty{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-12px) rotate(2deg)}}
 @keyframes confettiFall{to{top:105%;transform:translateX(calc((var(--i) - 13)*2px)) rotate(540deg)}}
-@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}.match-grid{grid-template-columns:repeat(2,132px);gap:9px}.match-card{height:82px}.match-card .object-picture{background-size:300% 200%}.match-truck-progress{right:-4px;bottom:0;width:130px}.truck-shell,.truck-shell img{width:125px;height:90px}.signal-lights{top:-3px;left:30px;gap:2px;padding:3px 4px}.signal-lamp{width:11px;height:11px}.match-praise{font-size:10px;padding:5px 8px}.lamp-status{font-size:9px}.truck-shell:before,.truck-shell:after{display:none}}
+/* Lights are placed directly over Jay's three roof lamps and two headlights. */
+.match-truck-progress{left:18px;right:auto;top:92px;bottom:auto;width:320px}
+.truck-shell,.truck-shell img{width:310px;height:235px}
+.signal-lights{inset:0;top:0;left:0;display:block;padding:0;background:none;border:0;border-radius:0;box-shadow:none}
+.signal-lamp{position:absolute;width:20px;height:20px;margin:0;background:#526473;border:2px solid #aebac2;box-shadow:inset 0 2px 5px #1d2d39;transform:translate(-50%,-50%)}
+.signal-lamp.roof-one{left:59.5%;top:14%}.signal-lamp.roof-two{left:66%;top:13.5%}.signal-lamp.roof-three{left:72.5%;top:14%}
+.signal-lamp.headlight-one,.signal-lamp.headlight-two{width:28px;height:28px;top:59%}
+.signal-lamp.headlight-one{left:68.5%}.signal-lamp.headlight-two{left:94%}
+.signal-lamp.on{background:#fff04c;border-color:#fff9b0;box-shadow:0 0 13px 7px #ffd733,inset 0 2px 3px #fff}
+.match-truck-progress .truck-shell:before,.match-truck-progress .truck-shell:after{display:none}
+.match-active .match-grid{margin-top:280px}
+.game-instruction span{display:block}.game-instruction span+span{margin-top:6px}
+.match-truck-progress.selecting{top:88px;width:190px}
+.match-truck-progress.selecting .truck-shell,.match-truck-progress.selecting .truck-shell img{width:185px;height:140px}
+.match-truck-progress.selecting .signal-lamp{width:13px;height:13px}
+.match-truck-progress.selecting .signal-lamp.headlight-one,.match-truck-progress.selecting .signal-lamp.headlight-two{width:17px;height:17px}
+.match-truck-progress.selecting .match-praise,.match-truck-progress.selecting .lamp-status{font-size:9px}
+@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}.match-grid{grid-template-columns:repeat(2,132px);gap:9px}.match-card{height:82px}.match-card .object-picture{background-size:300% 200%}.match-truck-progress{left:4px;right:auto;top:96px;bottom:auto;width:160px}.truck-shell,.truck-shell img{width:155px;height:118px}.signal-lights{inset:0;display:block;padding:0;background:none;border:0;box-shadow:none}.signal-lamp{width:11px;height:11px}.signal-lamp.headlight-one,.signal-lamp.headlight-two{width:15px;height:15px}.match-praise{font-size:9px;padding:4px 7px}.lamp-status{font-size:8px}.match-active .match-grid{margin-top:170px}.match-truck-progress.selecting{top:88px;width:120px}.match-truck-progress.selecting .truck-shell,.match-truck-progress.selecting .truck-shell img{width:115px;height:88px}.match-truck-progress.selecting .match-praise,.match-truck-progress.selecting .lamp-status{display:none}.truck-shell:before,.truck-shell:after{display:none}}

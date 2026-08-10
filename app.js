@@ -15,7 +15,7 @@ const numberLevels=[
 const numberWords={1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'seven',8:'eight',9:'nine',10:'ten',11:'eleven',12:'twelve',13:'thirteen',14:'fourteen',15:'fifteen',16:'sixteen',17:'seventeen',18:'eighteen',19:'nineteen',20:'twenty',21:'twenty-one',30:'thirty',40:'forty',50:'fifty',60:'sixty',70:'seventy',80:'eighty',90:'ninety',100:'one hundred'};
 const gameNames={match:'WORD MATCH',sound:'SOUND DETECTIVE',unscramble:'UNSCRAMBLE'};
 const instructions={
-  match:'Open two cards. Match each English word with the correct picture.',
+  match:'<span>Help Lorry Jay turn on the light to start the journey.</span><span>Open two cards. Match each English word with the correct picture.</span>',
   sound:'Press the speaker, listen carefully and choose the number you hear.',
   unscramble:'Press Listen, then choose the letters in the correct order.'
 };
@@ -51,11 +51,12 @@ function saveBest(){let best=Math.max(score,+(localStorage.getItem('lumen-'+acti
 function showLevelSelect(){
   hideMessage();let area=$('#gameArea');
   activeGame==='match'?prepareMatchTruck(5):hideMatchTruck();
-  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>Choose a level</h2><div class="level-buttons"></div></div>`;
+  area.classList.toggle('match-select',activeGame==='match');area.classList.remove('match-active');$('#matchTruckProgress').classList.toggle('selecting',activeGame==='match');
+  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>${activeGame==='match'?'Choose the topic':'Choose a level'}</h2><div class="level-buttons"></div></div>`;
   let names=activeGame==='match'?topics.map(t=>t.name):activeGame==='sound'?numberLevels.map(t=>t.name):['Transport','Toys & Room','Numbers'];
   names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
 }
-function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
+function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;let area=$('#gameArea');area.classList.toggle('match-active',activeGame==='match');area.classList.remove('match-select');$('#matchTruckProgress').classList.remove('selecting');activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
 function completeLevel(){
   if(!completedLevels.has(level)){completedLevels.add(level);setScore(score+5)}saveBest();tone(760,.35);
   if(activeGame==='match'){finishMatchLevel();return}
@@ -65,7 +66,7 @@ function completeLevel(){
 const praisePhrases=['Great!','Well done!','Good job!','Amazing!'];
 function prepareMatchTruck(count){
   let panel=$('#matchTruckProgress');panel.hidden=false;$('.jay-coach').style.display='none';panel.classList.remove('party','hop');
-  $('#signalLights').innerHTML=Array.from({length:count},(_,i)=>`<span class="signal-lamp" aria-label="Pair ${i+1}"></span>`).join('');
+  $('#signalLights').innerHTML='<span class="signal-lamp roof-one" aria-label="Roof light 1"></span><span class="signal-lamp roof-two" aria-label="Roof light 2"></span><span class="signal-lamp roof-three" aria-label="Roof light 3"></span><span class="signal-lamp headlight-one" aria-label="Headlight 1"></span><span class="signal-lamp headlight-two" aria-label="Headlight 2"></span>';
   $('#lampStatus').textContent=`0 of ${count} pairs`;$('#matchPraise').textContent='Find a pair!';$('#confetti').innerHTML='';
 }
 function hideMatchTruck(){$('#matchTruckProgress').hidden=true;$('.jay-coach').style.display='block';$('#confetti').innerHTML=''}
