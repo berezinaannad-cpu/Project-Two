@@ -10,7 +10,8 @@
 .level-select{width:min(760px,92%);margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center}
 .level-select .game-instruction{max-width:620px;margin:0 auto 18px;padding:12px 20px;border:3px dashed #75cbd8;border-radius:18px;background:#fff;color:#4e718b;font-weight:800}
 .level-select h2{width:100%;margin:0 0 22px;text-align:center}
-.level-select .level-buttons{width:100%;justify-content:center;align-items:stretch;margin:0 auto}
+.level-select .level-buttons{width:100%;display:grid;grid-template-columns:repeat(3,190px);justify-content:center;align-items:stretch;gap:16px;margin:0 auto}
+.level-select .level-buttons button{width:190px;margin:0}
 .lesson-head{justify-content:center}
 .lesson-head h2{font-size:30px;text-align:center}
 .lesson-head p{position:absolute;right:0;margin:0}
@@ -20,4 +21,4 @@
 .match-card.open>span,.match-card.found>span{font-size:18px}
 .match-card.open>.picture,.match-card.found>.picture{font-size:48px}
 @keyframes wheel{to{transform:rotate(360deg)}}
-@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}}
+@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}}
