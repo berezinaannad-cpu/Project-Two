@@ -1,0 +1,22 @@
+/* Final layout refinements */
+.home{padding-top:1.5vh;padding-bottom:2vh}
+.home-title{height:17vh;min-height:112px}
+.cards{height:auto;align-items:start}
+.game-card{height:auto;align-self:start}
+.game-card img{height:clamp(245px,38vh,350px);flex:none}
+.card-copy{flex:none;padding:12px 10px 0}
+.card-copy h2{margin:5px 0 3px}
+.play{margin-top:12px}
+.level-select{width:min(760px,92%)}
+.level-select .game-instruction{max-width:620px;margin:0 auto 18px;padding:12px 20px;border:3px dashed #75cbd8;border-radius:18px;background:#fff;color:#4e718b;font-weight:800}
+.level-select h2{margin-bottom:22px}
+.lesson-head{justify-content:center}
+.lesson-head h2{font-size:30px;text-align:center}
+.lesson-head p{position:absolute;right:0;margin:0}
+.card-back{font-size:38px;color:#fff;text-shadow:0 3px 0 #1b74a5;animation:wheel 5s linear infinite}
+.match-card:not(.open):not(.found){background:linear-gradient(145deg,#72d5f0,#2a9fda);border-color:#fff;box-shadow:0 5px 0 #147aaa}
+.match-card .picture{font-size:48px;line-height:1}
+.match-card.open>span,.match-card.found>span{font-size:18px}
+.match-card.open>.picture,.match-card.found>.picture{font-size:48px}
+@keyframes wheel{to{transform:rotate(360deg)}}
+@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}}
