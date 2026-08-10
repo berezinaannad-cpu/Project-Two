@@ -67,7 +67,7 @@ const praisePhrases=['Great!','Well done!','Good job!','Amazing!'];
 function prepareMatchTruck(count){
   let panel=$('#matchTruckProgress');panel.hidden=false;$('.jay-coach').style.display='none';panel.classList.remove('party','hop');
   $('#signalLights').innerHTML='<span class="signal-lamp roof-one" aria-label="Roof light 1"></span><span class="signal-lamp roof-two" aria-label="Roof light 2"></span><span class="signal-lamp roof-three" aria-label="Roof light 3"></span><span class="signal-lamp headlight-one" aria-label="Headlight 1"></span><span class="signal-lamp headlight-two" aria-label="Headlight 2"></span>';
-  $('#lampStatus').textContent=`0 of ${count} pairs`;$('#matchPraise').textContent='Find a pair!';$('#confetti').innerHTML='';
+  $('#lampStatus').textContent=`0 of ${count} pairs`;$('#matchPraise').textContent='';$('#confetti').innerHTML='';
 }
 function hideMatchTruck(){$('#matchTruckProgress').hidden=true;$('.jay-coach').style.display='block';$('#confetti').innerHTML=''}
 function lightMatchLamp(found,total){
@@ -78,14 +78,14 @@ function lightMatchLamp(found,total){
 }
 function finishMatchLevel(){
   let panel=$('#matchTruckProgress');panel.classList.add('party');$('#matchPraise').textContent='Amazing!';
-  $('#confetti').innerHTML=Array.from({length:28},(_,i)=>`<i style="--i:${i};--x:${8+Math.random()*84}%;--delay:${Math.random()*.5}s"></i>`).join('');
+  $('#confetti').innerHTML=Array.from({length:64},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.8}s;--dur:${2.8+Math.random()*2.4}s;--drift:${-90+Math.random()*180}px"></i>`).join('');
   setTimeout(()=>message('All pairs found!',`You earned 5 points. Score: ${score} / 15`,true,'Play Again','Choose Another Game','match-replay'),700);
 }
 
 function matchLevel(){
   hideMessage();prepareMatchTruck(5);locked=false;let area=$('#gameArea'),chosen=shuffle(topics[level].words).slice(0,5);
   let cards=shuffle(chosen.flatMap((w,id)=>[{content:w[0],id,word:true},{content:w[1],id,word:false}]));
-  area.innerHTML=`<div class="lesson-head"><h2>${topics[level].name}</h2><p><b id="pairsLeft">5</b> pairs left</p></div><div class="match-grid"></div>`;
+  area.innerHTML=`<div class="lesson-head"><h2>${topics[level].name}</h2><p><b id="pairsLeft">5</b> pairs left</p></div><h3 class="match-mission">Help Lorry Jay turn on the light to start the journey.</h3><div class="match-grid"></div>`;
   let first=null,found=0;
   cards.forEach(c=>{
     let b=document.createElement('button');b.className='match-card';b.dataset.id=c.id;b.innerHTML='<span class="card-back">⚙</span>';
