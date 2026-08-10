@@ -3,9 +3,9 @@ const $$=(s,p=document)=>[...p.querySelectorAll(s)];
 let soundOn=true,audio,activeGame=null,score=0,level=0,locked=false,completedLevels=new Set();
 
 const topics=[
-  {name:'Transport',words:[['car','🚗'],['bus','🚌'],['lorry','🚚'],['train','🚂'],['helicopter','🚁'],['ship','🚢']]},
-  {name:'Toys',words:[['bear','🧸'],['doll','🪆'],['kite','🪁'],['ball','⚽'],['game','🎮'],['bike','🚲']]},
-  {name:'Room',words:[['lamp','💡'],['mat','🟫'],['sofa','🛋️'],['table','🪵'],['armchair','🪑']]}
+  {name:'Transport',sprite:'assets/wordmatch-transport.png',words:[['car',0],['bus',1],['lorry',2],['train',3],['helicopter',4],['ship',5]]},
+  {name:'Toys',sprite:'assets/wordmatch-toys.png',words:[['bear',0],['doll',1],['kite',2],['ball',3],['game',4],['bike',5]]},
+  {name:'Room',sprite:'assets/wordmatch-room.png',words:[['lamp',0],['mat',1],['sofa',2],['table',3],['armchair',4]]}
 ];
 const numberLevels=[
   {name:'Numbers 1–10',values:[1,2,3,4,5,6,7,8,9,10]},
@@ -51,7 +51,7 @@ function showLevelSelect(){
   hideMessage();let area=$('#gameArea');
   area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>Choose a level</h2><div class="level-buttons"></div></div>`;
   let names=activeGame==='match'?topics.map(t=>t.name):activeGame==='sound'?numberLevels.map(t=>t.name):['Transport','Toys & Room','Numbers'];
-  names.forEach((n,i)=>{let b=document.createElement('button');b.innerHTML=`<span>${completedLevels.has(i)?'✓':'0'+(i+1)}</span>${n}`;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
+  names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
 }
 function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
 function completeLevel(){
@@ -68,7 +68,9 @@ function matchLevel(){
     let b=document.createElement('button');b.className='match-card';b.dataset.id=c.id;b.innerHTML='<span class="card-back">⚙</span>';
     b.onclick=()=>{
       if(locked||b.classList.contains('found')||b===first)return;
-      b.classList.add('open');b.innerHTML=c.word?`<span>${c.content}</span><i>WORD</i>`:`<span class="picture">${c.content}</span><i>PICTURE</i>`;
+      b.classList.add('open');
+      if(c.word)b.innerHTML=`<span>${c.content}</span>`;
+      else{let x=(c.content%3)*50,y=Math.floor(c.content/3)*100;b.innerHTML=`<span class="object-picture" style="--sprite:url('${topics[level].sprite}');--x:${x}%;--y:${y}%" role="img" aria-label="matching picture"></span>`}
       if(c.word)speak(c.content);
       if(!first){first=b;return}
       if(first.dataset.id===b.dataset.id){

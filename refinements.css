@@ -20,5 +20,8 @@
 .match-card .picture{font-size:48px;line-height:1}
 .match-card.open>span,.match-card.found>span{font-size:18px}
 .match-card.open>.picture,.match-card.found>.picture{font-size:48px}
+.match-grid{grid-template-columns:repeat(5,136px);gap:14px}
+.match-card{height:150px;font-size:20px}
+.match-card .object-picture{display:block;width:100%;height:100%;padding:0;background-image:var(--sprite);background-size:300% 200%;background-position:var(--x) var(--y);background-repeat:no-repeat;border-radius:13px}
 @keyframes wheel{to{transform:rotate(360deg)}}
-@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}}
+@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}.match-grid{grid-template-columns:repeat(2,132px);gap:9px}.match-card{height:82px}.match-card .object-picture{background-size:300% 200%}}
