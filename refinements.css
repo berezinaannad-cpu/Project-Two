@@ -122,3 +122,11 @@
 @keyframes fuelDrive{from{transform:translateX(0) translateY(0)}to{transform:translateX(28px) translateY(-4px)}}
 @keyframes wrongLetters{20%{transform:translateX(-7px) rotate(-1deg)}40%{transform:translateX(7px) rotate(1deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 @media(max-width:800px){.fuel-truck-progress{left:4px;top:14px;width:155px}.fuel-truck-shell,.fuel-truck-shell>img{width:150px;height:112px}.fuel-praise{font-size:11px;padding:4px 7px}.fuel-count{font-size:10px;padding:4px 9px}.fuel-can{width:15px;height:20px;border-width:2px}.fuel-can:before{left:2px;top:-6px;width:8px;height:6px;border-width:2px}.fuel-can i{display:none}.fuel-headlight{width:13px;height:13px}.unscramble-active .unscramble{top:165px;left:10px;right:10px}.unscramble-active .word-slots{height:58px;margin:10px auto}.unscramble-active .letter-bank{margin:16px auto}.unscramble-active .feedback{margin-top:10px}}
+/* Balanced selection and finish screens */
+.level-select{justify-content:center;gap:24px}
+.level-select .game-instruction,.level-select h2,.level-select .level-buttons{margin-top:0;margin-bottom:0}
+.game-message.final-screen{place-content:normal;align-content:center;grid-template-rows:auto auto auto;justify-items:center;row-gap:34px;padding:50px 24px}
+.game-message.final-screen>img{width:150px;height:105px;margin:0}
+.game-message.final-screen h2{margin:0;line-height:1.05}
+.game-message.final-screen .message-actions{margin:0;justify-content:center}
+@media(max-width:800px){.level-select{gap:17px}.game-message.final-screen{row-gap:24px;padding:30px 14px}.game-message.final-screen>img{width:125px;height:88px}.game-message.final-screen h2{font-size:34px}}

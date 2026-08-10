@@ -36,12 +36,12 @@ function startGame(id){
   coach("Let's play!");showLevelSelect();
 }
 function goHome(){$('#gameScreen').classList.remove('open');speechSynthesis.cancel()}
-$('.back').onclick=goHome;$('.message-home').onclick=goHome;
+$('.back').onclick=goHome;$('.message-home').onclick=()=>showLevelSelect();
 function hideMessage(){$('#gameMessage').classList.add('hidden')}
 function message(title,text,finished=false,primaryLabel='Play again',secondaryLabel='Back to the main page',action='replay'){
   let m=$('#gameMessage');$('h2',m).textContent=title;$('p',m).textContent=text;
   $('.restart',m).textContent=primaryLabel;$('.restart',m).dataset.action=action;$('.message-home',m).textContent=secondaryLabel;
-  $('.message-home',m).style.display=finished?'inline-block':'none';m.classList.remove('hidden');
+  $('.message-home',m).style.display=finished?'inline-block':'none';m.classList.toggle('final-screen',finished);m.classList.remove('hidden');
 }
 $('.restart').onclick=e=>{if(['match-replay','sound-replay','fuel-replay'].includes(e.currentTarget.dataset.action)){score=0;completedLevels=new Set();setScore(0);beginLevel(level)}else startGame(activeGame)};
 function coach(text,good=true){let bubble=$('#jaySpeech');bubble.textContent=text;bubble.classList.toggle('try',!good)}
@@ -53,7 +53,7 @@ function showLevelSelect(){
   activeGame==='match'?prepareMatchTruck(5):hideMatchTruck();
   hideFuelTruck();
   area.classList.toggle('match-select',activeGame==='match');area.classList.toggle('sound-select',activeGame==='sound');area.classList.remove('match-active','sound-active');$('#matchTruckProgress').classList.toggle('selecting',activeGame==='match');
-  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>${activeGame==='unscramble'?'Choose a level':'Choose the topic'}</h2><div class="level-buttons"></div></div>`;
+  area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>Choose the topic</h2><div class="level-buttons"></div></div>`;
   let names=activeGame==='match'?topics.map(t=>t.name):activeGame==='sound'?numberLevels.map(t=>t.name):['Transport','Toys & Room','Numbers'];
   names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
 }
@@ -150,7 +150,7 @@ function addFuelCan(found,total){
 }
 function finishFuelLevel(){
   let panel=$('#fuelTruckProgress');panel.classList.add('ready');$('#fuelPraise').textContent='Amazing!';tone(125,.55,'sawtooth');
-  setTimeout(()=>message('The truck is ready to go!','',true,'Play Again','Choose Another Game','fuel-replay'),900);
+  setTimeout(()=>{hideFuelTruck();message('The truck is ready to go!','',true,'Play Again','Choose Another Game','fuel-replay')},900);
 }
 
 function unscrambleLevel(){
