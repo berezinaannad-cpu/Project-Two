@@ -24,4 +24,26 @@
 .match-card{height:150px;font-size:20px}
 .match-card .object-picture{display:block;width:100%;height:100%;padding:0;background-image:var(--sprite);background-size:300% 200%;background-position:var(--x) var(--y);background-repeat:no-repeat;border-radius:13px}
 @keyframes wheel{to{transform:rotate(360deg)}}
-@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}.match-grid{grid-template-columns:repeat(2,132px);gap:9px}.match-card{height:82px}.match-card .object-picture{background-size:300% 200%}}
+.match-truck-progress{position:absolute;right:-55px;bottom:2px;width:230px;z-index:6;text-align:center;pointer-events:none}
+.truck-shell{position:relative;width:220px;height:155px;margin-left:auto;transform-origin:50% 100%}
+.truck-shell img{width:220px;height:155px;object-fit:contain;filter:drop-shadow(0 8px 5px #27536b38)}
+.signal-lights{position:absolute;z-index:2;top:10px;left:68px;display:flex;gap:5px;padding:5px 7px;border-radius:20px;background:#195a99;border:3px solid #fff;box-shadow:0 3px 0 #103d72}
+.signal-lamp{width:16px;height:16px;border-radius:50%;background:#6d8495;border:2px solid #c7d1d8;box-shadow:inset 0 2px 3px #23394d80;transition:.3s}
+.signal-lamp.on{background:#ffd62e;border-color:#fff4a2;box-shadow:0 0 8px 3px #ffcf33,inset 0 2px 2px #fff8}
+.match-praise{display:inline-block;min-width:105px;margin:0 0 -7px;padding:8px 13px;border:3px solid #ff9a1f;border-radius:18px;background:#fff;color:#e66d12;font-weight:900;box-shadow:0 4px 0 #d9821e}
+.lamp-status{display:inline-block;margin:-8px 0 0;padding:4px 10px;border-radius:99px;background:#174e86;color:#fff;font-size:11px;font-weight:900}
+.truck-shell:before,.truck-shell:after{content:"";position:absolute;z-index:3;top:87px;width:15px;height:15px;border-radius:50%;opacity:0;background:#fff8a4;box-shadow:0 0 16px 7px #ffe45d}
+.truck-shell:before{right:24px}.truck-shell:after{right:63px}
+.match-truck-progress.hop .truck-shell{animation:truckHop .6s ease}
+.match-truck-progress.hop .truck-shell:before,.match-truck-progress.hop .truck-shell:after{animation:headlightBlink .6s ease}
+.match-truck-progress.party .truck-shell{animation:truckParty .8s ease-in-out infinite alternate}
+.match-truck-progress.party{z-index:10}
+.match-truck-progress.party .truck-shell:before,.match-truck-progress.party .truck-shell:after{opacity:1}
+.match-truck-progress.party .signal-lamp{background:#ffd62e;border-color:#fff4a2;box-shadow:0 0 10px 4px #ffcf33}
+.confetti{position:absolute;inset:74px 0 0;z-index:9;overflow:hidden;pointer-events:none}
+.confetti i{position:absolute;left:var(--x);top:-20px;width:10px;height:16px;border-radius:3px;background:hsl(calc(var(--i)*43deg) 85% 58%);animation:confettiFall 1.8s var(--delay) ease-in forwards;transform:rotate(calc(var(--i)*31deg))}
+@keyframes truckHop{0%,100%{transform:translateY(0)}45%{transform:translateY(-15px) rotate(-2deg)}70%{transform:translateY(0) rotate(2deg)}}
+@keyframes headlightBlink{30%,80%{opacity:1}50%,100%{opacity:0}}
+@keyframes truckParty{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-12px) rotate(2deg)}}
+@keyframes confettiFall{to{top:105%;transform:translateX(calc((var(--i) - 13)*2px)) rotate(540deg)}}
+@media(max-width:800px){.home-title{height:auto}.game-card img{height:300px}.lesson-head h2{font-size:24px}.lesson-head p{font-size:10px}.level-select .game-instruction{font-size:13px}.level-select .level-buttons{grid-template-columns:1fr;width:min(240px,100%)}.level-select .level-buttons button{width:100%}.match-grid{grid-template-columns:repeat(2,132px);gap:9px}.match-card{height:82px}.match-card .object-picture{background-size:300% 200%}.match-truck-progress{right:-4px;bottom:0;width:130px}.truck-shell,.truck-shell img{width:125px;height:90px}.signal-lights{top:-3px;left:30px;gap:2px;padding:3px 4px}.signal-lamp{width:11px;height:11px}.match-praise{font-size:10px;padding:5px 8px}.lamp-status{font-size:9px}.truck-shell:before,.truck-shell:after{display:none}}
