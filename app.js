@@ -17,7 +17,7 @@ const gameNames={match:'WORD MATCH',sound:'SOUND DETECTIVE',unscramble:'UNSCRAMB
 const instructions={
   match:'<span>Help Lorry Jay turn on the light to start the journey.</span><span>Open two cards. Match each English word with the correct picture.</span>',
   sound:'<span>Help Lorry Jay reach the finish line!</span><span>Press the speaker, listen carefully and choose the number you hear.</span>',
-  unscramble:'Press Listen, then choose the letters in the correct order.'
+  unscramble:'<span>Help Lorry Jay pick up all the petrol cans and start the journey.</span><span>Press Listen, then choose the letters in the correct order.</span>'
 };
 
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}

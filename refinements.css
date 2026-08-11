@@ -129,4 +129,7 @@
 .game-message.final-screen>img{width:150px;height:105px;margin:0}
 .game-message.final-screen h2{margin:0;line-height:1.05}
 .game-message.final-screen .message-actions{margin:0;justify-content:center}
+.fuel-cans{inset:auto;left:9%;top:38%;width:34%;height:29%}
+.fuel-can{width:23px;height:31px}
+.fuel-can:nth-child(1){left:3%;top:5%}.fuel-can:nth-child(2){left:34%;top:1%}.fuel-can:nth-child(3){left:65%;top:5%}.fuel-can:nth-child(4){left:19%;top:43%}.fuel-can:nth-child(5){left:51%;top:43%}
 @media(max-width:800px){.level-select{gap:17px}.game-message.final-screen{row-gap:24px;padding:30px 14px}.game-message.final-screen>img{width:125px;height:88px}.game-message.final-screen h2{font-size:34px}}
