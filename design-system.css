@@ -1,0 +1,48 @@
+/* Play with Lorry Jay — shared adventure design system */
+:root{--jay-blue:#1679d3;--jay-blue-dark:#0e579f;--jay-orange:#ff861b;--jay-yellow:#ffd43b;--adventure-sky:#dff6ff;--adventure-grass:#bde9b5;--panel:#fffdf6;--ink:#174b7b;--soft-shadow:0 8px 0 #8bcbdc,0 18px 35px #2a6f8c24;--radius-xl:30px;--radius-lg:22px;--transition:.58s cubic-bezier(.2,.75,.25,1)}
+.game-screen{background:linear-gradient(180deg,#73d7ed 0 34%,#bcead0 34% 100%)}
+.game-header{height:72px;padding:0 clamp(14px,3vw,42px);border-bottom:4px solid #9cdeed;background:#fff;box-shadow:0 5px 18px #256e9220;position:relative;z-index:20}
+.game-name{position:absolute;left:50%;transform:translateX(-50%);font:700 clamp(21px,2.1vw,31px) Fredoka;color:var(--jay-blue);letter-spacing:.02em;white-space:nowrap}
+.nav-cluster{display:flex;gap:9px;align-items:center}
+.nav-circle{position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border:3px solid #fff;border-radius:50%;background:#e6f6ff;color:var(--jay-blue);font:800 22px Fredoka;box-shadow:0 4px 0 #9bcfe1;cursor:pointer;transition:.2s}
+.nav-circle:hover{transform:translateY(-2px);background:#fff4cf;color:var(--jay-orange);box-shadow:0 6px 0 #e9bd58}
+.nav-circle:active{transform:translateY(2px);box-shadow:0 2px 0 #9bcfe1}
+.nav-circle:after{content:attr(data-tip);position:absolute;top:51px;left:50%;transform:translateX(-50%) translateY(-4px);z-index:30;width:max-content;padding:5px 9px;border-radius:8px;background:#174b7b;color:#fff;font:700 10px Nunito;opacity:0;pointer-events:none;transition:.2s}
+.nav-circle:hover:after{opacity:1;transform:translateX(-50%) translateY(0)}
+.game-sound{margin-left:auto;font-size:18px}
+.game-screen.choosing .back,.game-screen.choosing .nav-restart{display:none}
+.game-screen.playing .back,.game-screen.playing .nav-restart{display:grid}
+.game-wrap{width:min(1120px,95vw);margin:17px auto;position:relative}
+#gameArea{height:min(690px,calc(100vh - 112px));min-height:565px;border:8px solid #fff;border-radius:var(--radius-xl);box-shadow:var(--soft-shadow);background:
+ radial-gradient(ellipse at 12% 14%,#fff 0 5%,transparent 5.5%),radial-gradient(ellipse at 20% 14%,#fff 0 7%,transparent 7.5%),radial-gradient(ellipse at 82% 18%,#fff 0 6%,transparent 6.5%),radial-gradient(ellipse at 90% 18%,#fff 0 5%,transparent 5.5%),
+ radial-gradient(ellipse at 8% 92%,#77c76f 0 15%,transparent 15.5%),radial-gradient(ellipse at 33% 96%,#93d685 0 22%,transparent 22.5%),radial-gradient(ellipse at 76% 96%,#77c76f 0 24%,transparent 24.5%),
+ linear-gradient(to bottom,transparent 0 89%,#74818a 89% 96%,#58646d 96% 100%),linear-gradient(180deg,#e4f8ff 0 52%,#eaf8d8 52% 100%);overflow:hidden}
+#gameArea.scene-enter{animation:sceneEnter .58s ease both}
+@keyframes sceneEnter{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.level-select{width:min(850px,88%);gap:22px;z-index:2}
+.level-select .game-instruction{max-width:850px;color:var(--jay-blue);text-shadow:0 2px 0 #fff}
+.level-select .game-instruction span:first-child{font-size:clamp(34px,3.5vw,49px)}
+.level-select .game-instruction span+span{font-size:clamp(17px,1.55vw,22px);color:var(--ink)}
+.level-select h2{font-size:24px;color:var(--jay-orange);text-transform:uppercase;letter-spacing:.06em}
+.level-select .level-buttons{grid-template-columns:repeat(3,minmax(170px,210px));gap:20px}
+.level-select .level-buttons button{width:100%;min-height:112px;border-radius:var(--radius-lg);border:5px solid #fff;font:700 19px Fredoka;box-shadow:0 8px 0 #198eb4,0 13px 23px #29698628;transition:var(--transition)}
+.level-select .level-buttons button:nth-child(2){box-shadow:0 8px 0 #6844ad,0 13px 23px #6844ad2b}.level-select .level-buttons button:nth-child(3){box-shadow:0 8px 0 #d85b3f,0 13px 23px #b64f342b}
+.level-select .level-buttons button:hover{transform:translateY(-7px);filter:saturate(1.08) brightness(1.03)}
+.level-select .level-buttons button.selected{transform:translateY(-3px) scale(1.045);outline:7px solid #fff5a9;filter:brightness(1.08)}
+.jay-coach{right:20px;bottom:8px;z-index:6}.jay-coach img{width:175px;height:125px}.jay-coach p{right:112px;top:-8px;font:700 15px Fredoka;color:var(--jay-orange);border:0;box-shadow:0 5px 0 #b7ddea;padding:10px 16px}
+.scene-topic{font:700 30px Fredoka;color:var(--jay-blue);text-align:center;text-shadow:0 2px 0 #fff}
+.sound-active>.scene-topic,.unscramble-active>.scene-topic{position:absolute;z-index:5;top:15px;left:0;right:0;margin:0}
+.lesson-head{top:14px;z-index:5}.lesson-head .scene-topic{font-size:30px;color:var(--jay-blue)}
+.feedback{font-family:Fredoka;color:var(--jay-blue)}
+.game-message{border-radius:var(--radius-xl);background:#f9fdfff2}
+.game-message.final-screen{row-gap:30px}
+.game-message.final-screen h2{color:var(--jay-orange);text-shadow:0 3px 0 #fff;font-size:clamp(38px,4vw,56px)}
+.game-message.final-screen>img{filter:drop-shadow(0 7px 5px #1e4c6638)}
+.primary,.secondary{min-height:50px;padding:12px 25px;font:700 16px Fredoka;transition:.2s}
+.primary:hover,.secondary:hover{transform:translateY(-3px)}
+.match-card,.answer-grid button,.letter-bank button,.speaker,.listen-word,.erase{transition:.2s}
+.match-card:hover,.answer-grid button:hover,.letter-bank button:hover{transform:translateY(-3px)}
+.sound-road{top:48px}.sound-stage{top:280px}
+.unscramble-active .unscramble{top:72px}
+.fuel-truck-progress{top:125px}
+@media(max-width:800px){.game-header{height:62px;padding:0 9px}.nav-cluster{gap:4px}.nav-circle{width:38px;height:38px;font-size:18px}.game-name{font-size:17px}.game-wrap{width:96vw;margin:10px auto}#gameArea{height:calc(100vh - 84px);min-height:650px;border-width:5px;border-radius:22px}.level-select{width:92%;gap:15px}.level-select .game-instruction span:first-child{font-size:28px}.level-select .game-instruction span+span{font-size:15px}.level-select h2{font-size:18px}.level-select .level-buttons{grid-template-columns:1fr;width:min(250px,100%);gap:12px}.level-select .level-buttons button{min-height:66px;font-size:16px}.jay-coach{right:2px;bottom:2px}.jay-coach img{width:105px;height:78px}.jay-coach p{right:70px;font-size:10px;padding:6px 9px}.sound-active>.scene-topic,.unscramble-active>.scene-topic{top:8px;font-size:22px}.sound-road{top:35px}.sound-stage{top:200px}.unscramble-active .unscramble{top:165px}.fuel-truck-progress{top:45px}.message-actions{flex-direction:column;width:min(260px,90%)}.message-actions button{width:100%}}

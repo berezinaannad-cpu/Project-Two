@@ -24,7 +24,7 @@ function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 function stopAudio(){speechSynthesis.cancel();if(activeOscillator){try{activeOscillator.stop()}catch{}activeOscillator=null}}
 function tone(freq=440,d=.12,type='sine'){if(!soundOn)return;stopAudio();audio??=new AudioContext();let o=audio.createOscillator(),g=audio.createGain();activeOscillator=o;o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.07,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+d);o.onended=()=>{if(activeOscillator===o)activeOscillator=null}}
 function speak(text){if(!soundOn)return;stopAudio();let u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.78;speechSynthesis.speak(u)}
-function toggleSound(){soundOn=!soundOn;if(!soundOn)stopAudio();$$('.sound-toggle').forEach(b=>b.textContent=soundOn?'🔊 Sound':'🔇 Sound');if(soundOn)tone(520)}
+function toggleSound(){soundOn=!soundOn;if(!soundOn)stopAudio();$$('.sound-toggle').forEach(b=>b.textContent=b.classList.contains('game-sound')?(soundOn?'🔊':'🔇'):(soundOn?'🔊 Sound':'🔇 Sound'));if(soundOn)tone(520)}
 $$('.sound-toggle').forEach(b=>b.onclick=toggleSound);
 $$('[data-game]').forEach(b=>b.onclick=()=>startGame(b.dataset.game));
 
@@ -35,8 +35,8 @@ function startGame(id){
   $('#secondary').textContent='1 / 3';$('#gameScreen').classList.add('open');
   coach("Let's play!");showLevelSelect();
 }
-function goHome(){$('#gameScreen').classList.remove('open');speechSynthesis.cancel()}
-$('.back').onclick=goHome;$('.message-home').onclick=()=>showLevelSelect();
+function goHome(){$('#gameScreen').classList.remove('open','choosing','playing');speechSynthesis.cancel()}
+$('.home-button').onclick=goHome;$('.back').onclick=()=>showLevelSelect();$('.nav-restart').onclick=()=>beginLevel(level);$('.message-home').onclick=()=>showLevelSelect();
 function hideMessage(){$('#gameMessage').classList.add('hidden')}
 function message(title,text,finished=false,primaryLabel='Play again',secondaryLabel='Back to the main page',action='replay'){
   let m=$('#gameMessage');$('h2',m).textContent=title;$('p',m).textContent=text;
@@ -50,14 +50,13 @@ function saveBest(){let best=Math.max(score,+(localStorage.getItem('lumen-'+acti
 
 function showLevelSelect(){
   hideMessage();let area=$('#gameArea');
-  activeGame==='match'?prepareMatchTruck(5):hideMatchTruck();
-  hideFuelTruck();
+  $('#gameScreen').classList.add('choosing');$('#gameScreen').classList.remove('playing');hideMatchTruck();hideFuelTruck();$('.jay-coach').style.display='block';coach("Let's play!");
   area.classList.toggle('match-select',activeGame==='match');area.classList.toggle('sound-select',activeGame==='sound');area.classList.remove('match-active','sound-active');$('#matchTruckProgress').classList.toggle('selecting',activeGame==='match');
   area.innerHTML=`<div class="level-select"><p class="game-instruction">${instructions[activeGame]}</p><h2>Choose the topic</h2><div class="level-buttons"></div></div>`;
   let names=activeGame==='match'?topics.map(t=>t.name):activeGame==='sound'?numberLevels.map(t=>t.name):['Transport','Toys & Room','Numbers'];
-  names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>beginLevel(i);$('.level-buttons',area).append(b)});
+  names.forEach((n,i)=>{let b=document.createElement('button');b.textContent=n;b.disabled=completedLevels.has(i);b.onclick=()=>{if(b.disabled)return;$$('.level-buttons button',area).forEach(x=>x.disabled=true);b.classList.add('selected');setTimeout(()=>beginLevel(i),560)};$('.level-buttons',area).append(b)});
 }
-function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;let area=$('#gameArea');area.classList.toggle('match-active',activeGame==='match');area.classList.toggle('sound-active',activeGame==='sound');area.classList.toggle('unscramble-active',activeGame==='unscramble');area.classList.remove('match-select','sound-select');$('#matchTruckProgress').classList.remove('selecting');activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
+function beginLevel(i){level=i;$('#secondary').textContent=`${i+1} / 3`;$('#gameScreen').classList.remove('choosing');$('#gameScreen').classList.add('playing');let area=$('#gameArea');area.classList.toggle('match-active',activeGame==='match');area.classList.toggle('sound-active',activeGame==='sound');area.classList.toggle('unscramble-active',activeGame==='unscramble');area.classList.remove('match-select','sound-select','scene-enter');void area.offsetWidth;area.classList.add('scene-enter');$('#matchTruckProgress').classList.remove('selecting');activeGame==='match'?matchLevel():activeGame==='sound'?soundLevel():unscrambleLevel()}
 function completeLevel(){
   if(!completedLevels.has(level)){completedLevels.add(level);setScore(score+5)}saveBest();tone(760,.35);
   if(activeGame==='match'){finishMatchLevel();return}
@@ -88,7 +87,7 @@ function finishMatchLevel(){
 function matchLevel(){
   hideMessage();prepareMatchTruck(5);locked=false;let area=$('#gameArea'),chosen=shuffle(topics[level].words).slice(0,5);
   let cards=shuffle(chosen.flatMap((w,id)=>[{content:w[0],id,word:true},{content:w[1],id,word:false}]));
-  area.innerHTML=`<div class="lesson-head"><h2>${topics[level].name}</h2><p><b id="pairsLeft">5</b> pairs left</p></div><h3 class="match-mission">Help Lorry Jay turn on the light to start the journey.</h3><div class="match-grid"></div>`;
+  area.innerHTML=`<div class="lesson-head"><h2 class="scene-topic">${topics[level].name}</h2><p><b id="pairsLeft">5</b> pairs left</p></div><h3 class="match-mission">Help Lorry Jay turn on the light to start the journey.</h3><div class="match-grid"></div>`;
   let first=null,found=0;
   cards.forEach(c=>{
     let b=document.createElement('button');b.className='match-card';b.dataset.id=c.id;b.innerHTML='<span class="card-back">⚙</span>';
@@ -113,7 +112,7 @@ function matchLevel(){
 function soundLevel(){
   hideMessage();hideMatchTruck();$('.jay-coach').style.display='none';locked=false;
   let pool=numberLevels[level].values,questions=shuffle(pool).slice(0,5),q=0,correct=0,area=$('#gameArea');
-  area.innerHTML='<div class="sound-road" id="soundRoad"><div class="road-line"><span class="start-mark">START</span><span class="finish-line"></span><img class="road-truck" src="assets/lorry-jay.png" alt="Lorry Jay on the road"></div><div class="road-progress-text" id="roadProgressText">0 / 5</div></div><div class="sound-stage"></div>';
+  area.innerHTML=`<h2 class="scene-topic">${numberLevels[level].name}</h2><div class="sound-road" id="soundRoad"><div class="road-line"><span class="start-mark">START</span><span class="finish-line"></span><img class="road-truck" src="assets/lorry-jay.png" alt="Lorry Jay on the road"></div><div class="road-progress-text" id="roadProgressText">0 / 5</div></div><div class="sound-stage"></div>`;
   function moveTruck(){let road=$('#soundRoad');road.style.setProperty('--road-progress',`${5+correct*18}%`);$('#roadProgressText').textContent=`${correct} / 5`;road.classList.remove('driving');void road.offsetWidth;road.classList.add('driving')}
   function render(){
     let answer=questions[q],options=shuffle([answer,...shuffle(pool.filter(n=>n!==answer)).slice(0,3)]),stage=$('.sound-stage',area);
@@ -158,7 +157,7 @@ function unscrambleLevel(){
   let words=shuffle(sets[level]).slice(0,5),q=0,area=$('#gameArea');
   function render(){
     let word=words[q][0],target=word.replace(/[- ]/g,''),chars=shuffle(target.split('').map((char,id)=>({char,id}))),built=[];
-    area.innerHTML=`<div class="unscramble"><p class="eyebrow">WORD ${q+1} OF 5</p><button class="listen-word">🔊 Listen</button><div class="word-slots"></div><div class="letter-bank"></div><button class="erase">← Remove a letter</button><p class="feedback" aria-live="polite"></p></div>`;
+    let topicName=['Transport','Toys & Room','Numbers'][level];area.innerHTML=`<h2 class="scene-topic">${topicName}</h2><div class="unscramble"><p class="eyebrow">WORD ${q+1} OF 5</p><button class="listen-word">🔊 Listen</button><div class="word-slots"></div><div class="letter-bank"></div><button class="erase">← Remove a letter</button><p class="feedback" aria-live="polite"></p></div>`;
     let bank=$('.letter-bank',area),slots=$('.word-slots',area);$('.listen-word',area).onclick=()=>speak(word);setTimeout(()=>speak(word),250);
     chars.forEach(o=>{let b=document.createElement('button');b.textContent=o.char;b.onclick=()=>{
       b.disabled=true;built.push({char:o.char,button:b});slots.textContent=built.map(x=>x.char).join('');tone(380+built.length*20);

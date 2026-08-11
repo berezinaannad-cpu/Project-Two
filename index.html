@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="games.css">
   <link rel="stylesheet" href="refinements.css">
+  <link rel="stylesheet" href="design-system.css">
 </head>
 <body>
   <main class="home" id="home">
@@ -35,9 +36,13 @@
 
   <section class="game-screen" id="gameScreen" aria-hidden="true">
     <header class="game-header">
-      <button class="back">← <span>Main page</span></button>
+      <div class="nav-cluster">
+        <button class="nav-circle home-button" data-tip="Home" aria-label="Home">⌂</button>
+        <button class="nav-circle back" data-tip="Back to topics" aria-label="Back to topics">←</button>
+        <button class="nav-circle nav-restart" data-tip="Restart round" aria-label="Restart round">↻</button>
+      </div>
       <div class="game-name"></div>
-      <button class="sound-toggle game-sound" aria-label="Toggle sound">🔊 Sound</button>
+      <button class="nav-circle sound-toggle game-sound" data-tip="Sound on/off" aria-label="Toggle sound">🔊</button>
     </header>
     <div class="game-wrap">
       <div class="game-meta">
