@@ -43,6 +43,13 @@ function message(title,text,finished=false,primaryLabel='Play again',secondaryLa
   $('.restart',m).textContent=primaryLabel;$('.restart',m).dataset.action=action;$('.message-home',m).textContent=secondaryLabel;
   $('.message-home',m).style.display=finished?'inline-block':'none';m.classList.toggle('final-screen',finished);m.classList.remove('hidden');
 }
+function launchFinalConfetti(count=72){
+  $('#confetti').innerHTML=Array.from({length:count},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.6}s;--dur:${3+Math.random()*2.4}s;--drift:${-100+Math.random()*200}px"></i>`).join('');
+}
+function finalMessage(title,action){
+  launchFinalConfetti();
+  message(title,'',true,'Play Again','Choose Another Topic',action);
+}
 $('.restart').onclick=e=>{if(['match-replay','sound-replay','fuel-replay'].includes(e.currentTarget.dataset.action)){score=0;completedLevels=new Set();setScore(0);beginLevel(level)}else startGame(activeGame)};
 function coach(text,good=true){let bubble=$('#jaySpeech');bubble.textContent=text;bubble.classList.toggle('try',!good)}
 function setScore(n){score=n;$('#score').textContent=n}
@@ -80,8 +87,8 @@ function lightMatchLamp(found,total){
 }
 function finishMatchLevel(){
   let panel=$('#matchTruckProgress');panel.classList.add('party');$('#matchPraise').textContent='Amazing!';
-  $('#confetti').innerHTML=Array.from({length:64},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.8}s;--dur:${2.8+Math.random()*2.4}s;--drift:${-90+Math.random()*180}px"></i>`).join('');
-  setTimeout(()=>message('All pairs found!',`You earned 5 points. Score: ${score} / 15`,true,'Play Again','Choose Another Game','match-replay'),700);
+  launchFinalConfetti();
+  setTimeout(()=>finalMessage('Great! Lorry Jay can start the journey with the lights on!','match-replay'),700);
 }
 
 function matchLevel(){
@@ -133,8 +140,8 @@ function soundLevel(){
 
 function finishSoundLevel(){
   let road=$('#soundRoad');road?.classList.add('finish');
-  $('#confetti').innerHTML=Array.from({length:54},(_,i)=>`<i style="--i:${i};--x:${3+Math.random()*94}%;--delay:${Math.random()*1.2}s;--dur:${2.5+Math.random()*2}s;--drift:${-80+Math.random()*160}px"></i>`).join('');
-  setTimeout(()=>tone(880,.4,'triangle'),120);setTimeout(()=>message('You reached the finish!','',true,'Play Again','Choose Another Game','sound-replay'),850);
+  launchFinalConfetti();
+  setTimeout(()=>tone(880,.4,'triangle'),120);setTimeout(()=>finalMessage('Great! Lorry Jay reached the finish!','sound-replay'),850);
 }
 
 function prepareFuelTruck(total){
@@ -149,7 +156,8 @@ function addFuelCan(found,total){
 }
 function finishFuelLevel(){
   let panel=$('#fuelTruckProgress');panel.classList.add('ready');$('#fuelPraise').textContent='Amazing!';tone(125,.55,'sawtooth');
-  setTimeout(()=>{hideFuelTruck();message('The truck is ready to go!','',true,'Play Again','Choose Another Game','fuel-replay')},900);
+  launchFinalConfetti();
+  setTimeout(()=>{hideFuelTruck();finalMessage('Great! Lorry Jay is ready to go!','fuel-replay')},900);
 }
 
 function unscrambleLevel(){
